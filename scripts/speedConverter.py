@@ -3,9 +3,6 @@ import rospy
 from balboa_core.msg import balboaMotorSpeeds
 from std_msgs.msg import Float64
 
-MOTOR_SPEED_CAP = 20
-LINEAR_SPEED_SCALE = 0.0
-ANGULAR_SPEED_SCALE = 0.25
 
 class SpeedConverterNode(object):
     def __init__(self):
@@ -32,11 +29,13 @@ class SpeedConverterNode(object):
 
         if(motorSpeed.left > 25):
             motorSpeed.left = 25
+
         elif(motorSpeed.left < -25):
             motorSpeed.left = -25
 
         if(motorSpeed.right > 25):
             motorSpeed.right = 25
+
         elif(motorSpeed.right < -25):
             motorSpeed.right = -25
 
@@ -45,20 +44,19 @@ class SpeedConverterNode(object):
 
     def getLinearPIDOutputAndCalculateSpeed(self, output):
         self.linearPIDValue = output.data
-        
+
         motorSpeed = balboaMotorSpeeds()
 
         motorSpeed.left = self.linearPIDValue*.25
         motorSpeed.right = self.linearPIDValue*.25
 
-        motorSpeed.left = motorSpeed.left - self.angularPIDValue*.25
+        motorSpeed.left = motorSpeed.left - self.angularPIDValue
         motorSpeed.right = motorSpeed.right + self.angularPIDValue*.25
 
         if(motorSpeed.left > 25):
             motorSpeed.left = 25
         elif(motorSpeed.left < -25):
             motorSpeed.left = -25
-
         if(motorSpeed.right > 25):
             motorSpeed.right = 25
         elif(motorSpeed.right < -25):

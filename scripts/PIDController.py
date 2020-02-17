@@ -18,7 +18,7 @@ class PIDNode(object):
         self.previousError = 0
         self.integral = 0
 
-        rate = rospy.Rate(30) #30Hz
+        rate = rospy.Rate(30)
         while not rospy.is_shutdown():
             self.runPIDController()
             rate.sleep()
@@ -31,19 +31,27 @@ class PIDNode(object):
         error = self.goal - self.currentLocation
 
         self.integral = self.integral + error
-        if self.integral > 50:
-            self.integral = 50
-        elif self.integral < -50:
-            self.integral = -50
-            
+
+        if self.integral > 100:
+            self.integral = 100
+        elif self.integral < -100:
+            self.integral = -100
+
         self.pidPub.publish((self.p*(error) + self.i*(self.integral) + self.d*(error - self.previousError)))
         self.previousError = error
-
+        print(self.p, self.i, self.d)
+        print("==================================================================")
+        print("previous error is : {}".format(self.previousError))
+        print("Error is : {}".format(error))
+        print("Intergral is : {}".format(self.integral))
+        print("Current Location : {}".format(self.currentLocation))
+        print("Goal is : {}".format(self.goal))
+# COMBAK:
     def getGoal(self, goal):
         self.goal = goal.data
 
     def getCurrentLocation(self, current):
-        self.current = current.data
+        self.currentLocation = current.data
 
 if __name__ == '__main__':
     node = PIDNode()

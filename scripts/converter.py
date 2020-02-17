@@ -10,11 +10,13 @@ class InputConverterNode(object):
         rospy.Subscriber("/balboaLL", balboaLL, self.convertUnits)
         rospy.Subscriber("/turtle1/cmd_vel", Twist, self.createGoal)
 
-        self.currentAngular = 0;
-        self.currentLinear = 0;
+        self.currentAngular = 0
+        self.currentLinear = 0
+        self.angularGoal = self.currentAngular
+        self.linearGoal = self.currentLinear
 
         self.anglePub = rospy.Publisher("angularGoal", Float64, queue_size = 1)
-        self.distancePub = rospy.Publisher("distanceGoal", Float64, queue_size = 1)
+        self.distancePub = rospy.Publisher("linearGoal", Float64, queue_size = 1)
         self.currentAnglePub = rospy.Publisher("currentAngular", Float64, queue_size = 1)
         self.currentDistancePub = rospy.Publisher("currentLinear", Float64, queue_size = 1)
 
@@ -25,7 +27,7 @@ class InputConverterNode(object):
         rightLinear = balboaLLMessage.distanceRight
 
         self.currentAngular = balboaLLMessage.angleX / 970.00
-        self.currentLinear = calculateDistance(leftLinear, rightLinear) / 120
+        self.currentLinear = self.calculateDistance(leftLinear, rightLinear) / 120.0
         self.currentAnglePub.publish(Float64(self.currentAngular))
         self.currentDistancePub.publish(Float64(self.currentLinear))
 
@@ -33,14 +35,15 @@ class InputConverterNode(object):
         return (left + right)/2
 
     def createGoal(self, twist):
-        linearGoal = self.currentLinear
-        angularGoal = self.currentAngular
+        self.linearGoal = self.currentLinear
+        self.angularGoal = self.currentAngular
 
-        angularGoal = angularGoal + (twist.angular.z *.5)
-        linearGoal = linearGoal + (twist.linear.x *.1)
-
-        self.anglePub.publish(Float64(angularGoal))
-        self.distancePub.publish(Float64(distanceGoal))
+        self.angularGoal = self.angularGoal + (twist.angular.z*15)
+        self.linearGoal = self.linearGoal + (twist.linear.x*5)
+        print(twist.angular.z)
+        print(self.angularGoal)
+        self.anglePub.publish(Float64(self.angularGoal))
+        self.distancePub.publish(Float64(self.linearGoal))
 
 
 if __name__ == '__main__':

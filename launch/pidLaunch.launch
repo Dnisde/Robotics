@@ -9,24 +9,24 @@
         <param name="rCtrl/I" type="double" value="0.0"/>
         <param name="rCtrl/D" type="double" value="2.0"/>
         
-        <node pkg="balboa_core" name="angularPID" type="PIDController.py"/>
+        <node pkg="balboa_core" name="angularPID" type="PIDController.py" output="screen"/>
     </group>
     
      <group>
-        <remap from="goal" to="distanceGoal"/>
-        <remap from="currentPosition" to="currentlinear"/>
+        <remap from="goal" to="linearGoal"/>
+        <remap from="currentPosition" to="currentLinear"/>
         <remap from="pidValue" to="linearOutput"/>
 
         <param name="rCtrl/P" type="double" value="1.0"/>
         <param name="rCtrl/I" type="double" value="0.0"/>
         <param name="rCtrl/D" type="double" value="2.0"/>
         
-        <node pkg="balboa_core" name="linearPID" type="PIDController.py"/>
+        <node pkg="balboa_core" name="linearPID" type="PIDController.py" output="screen"/>
     </group>
 
     <node pkg="balboa_core" name="balboa_serial" type="balboa_serial.py" />
     <node pkg="turtlesim" name="turtle_teleop" type="turtle_teleop_key" />
-    <node pkg="balboa_core" name="inputConverter" type="converter.py"/>
+    <node pkg="balboa_core" name="inputConverter" type="converter.py" output="screen"/>
     <node pkg="balboa_core" name="motorSpeedHandler" type="speedConverter.py"/>
 
 </launch>
