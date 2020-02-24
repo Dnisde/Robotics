@@ -12,12 +12,13 @@ class PIDNode(object):
         self.p = 1.0
         self.i = 0.0
         self.d = 2.0
-
+        # Setting up constants
         self.goal = 0
         self.currentLocation = 0
         self.previousError = 0
         self.integral = 0
 
+        # Rounded PID calculator for 30 times a second
         rate = rospy.Rate(30)
         while not rospy.is_shutdown():
             self.runPIDController()
@@ -39,13 +40,13 @@ class PIDNode(object):
 
         self.pidPub.publish((self.p*(error) + self.i*(self.integral) + self.d*(error - self.previousError)))
         self.previousError = error
-        print(self.p, self.i, self.d)
-        print("==================================================================")
-        print("previous error is : {}".format(self.previousError))
-        print("Error is : {}".format(error))
-        print("Intergral is : {}".format(self.integral))
-        print("Current Location : {}".format(self.currentLocation))
-        print("Goal is : {}".format(self.goal))
+        # print(self.p, self.i, self.d)
+        # print("==================================================================")
+        # print("previous error is : {}".format(self.previousError))
+        # print("Error is : {}".format(error))
+        # print("Intergral is : {}".format(self.integral))
+        # print("Current Location : {}".format(self.currentLocation))
+        # print("Goal is : {}".format(self.goal))
 # COMBAK:
     def getGoal(self, goal):
         self.goal = goal.data

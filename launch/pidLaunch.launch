@@ -4,10 +4,13 @@
         <remap from="goal" to="angularGoal"/>
         <remap from="currentPosition" to="currentAngular"/>
         <remap from="pidValue" to="angularOutput"/>
-        
-        <param name="rCtrl/P" type="double" value="1.0"/>
-        <param name="rCtrl/I" type="double" value="0.0"/>
-        <param name="rCtrl/D" type="double" value="2.0"/>
+        <remap from="rCtrl/P" to="angularP"/>
+        <remap from="rCtrl/I" to="angularI"/>
+        <remap from="rCtrl/D" to="angularD"/>
+
+        <param name="angularP" type="double" value="0.5"/>
+        <param name="angularI" type="double" value="0.0"/>
+        <param name="angularD" type="double" value="1.0"/>
         
         <node pkg="balboa_core" name="angularPID" type="PIDController.py" output="screen"/>
     </group>
@@ -16,10 +19,13 @@
         <remap from="goal" to="linearGoal"/>
         <remap from="currentPosition" to="currentLinear"/>
         <remap from="pidValue" to="linearOutput"/>
+        <remap from="rCtrl/P" to="linearP"/>
+        <remap from="rCtrl/I" to="linearI"/>
+        <remap from="rCtrl/D" to="linearD"/>
 
-        <param name="rCtrl/P" type="double" value="1.0"/>
-        <param name="rCtrl/I" type="double" value="0.0"/>
-        <param name="rCtrl/D" type="double" value="2.0"/>
+        <param name="linearP" type="double" value="2.0"/>
+        <param name="linearI" type="double" value="0.0"/>
+        <param name="linearD" type="double" value="5.0"/>
         
         <node pkg="balboa_core" name="linearPID" type="PIDController.py" output="screen"/>
     </group>

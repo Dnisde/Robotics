@@ -21,8 +21,8 @@ class SpeedConverterNode(object):
 
         motorSpeed = balboaMotorSpeeds()
 
-        motorSpeed.left = self.linearPIDValue*.25
-        motorSpeed.right = self.linearPIDValue*.25
+        motorSpeed.left =  self.linearPIDValue
+        motorSpeed.right = self.linearPIDValue
 
         motorSpeed.left = motorSpeed.left - self.angularPIDValue*.25
         motorSpeed.right = motorSpeed.right + self.angularPIDValue*.25
@@ -47,10 +47,10 @@ class SpeedConverterNode(object):
 
         motorSpeed = balboaMotorSpeeds()
 
-        motorSpeed.left = self.linearPIDValue*.25
-        motorSpeed.right = self.linearPIDValue*.25
+        motorSpeed.left = self.linearPIDValue
+        motorSpeed.right = self.linearPIDValue
 
-        motorSpeed.left = motorSpeed.left - self.angularPIDValue
+        motorSpeed.left = motorSpeed.left - self.angularPIDValue*.25
         motorSpeed.right = motorSpeed.right + self.angularPIDValue*.25
 
         if(motorSpeed.left > 25):

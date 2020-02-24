@@ -95,7 +95,7 @@ class TheNode(object):
       # print "should be int_max: ", self.readFourByteAndChecksum()
       # print "should be int_min: ", self.readFourByteAndChecksum()
       # print "~~~~~~~"
-      
+
       #verify the checksum
       c = ord(self.port.read())
       if c != self.checksum:
@@ -104,12 +104,10 @@ class TheNode(object):
 
       #Publish
       self.publisher.publish(msg)
-      
+
       r.sleep()
-      
+
 
 if __name__ == '__main__':
   a = TheNode()
   a.main_loop()
-
-

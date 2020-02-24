@@ -27,21 +27,24 @@ class InputConverterNode(object):
         rightLinear = balboaLLMessage.distanceRight
 
         self.currentAngular = balboaLLMessage.angleX / 970.00
-        self.currentLinear = self.calculateDistance(leftLinear, rightLinear) / 120.0
+        self.currentLinear = self.calculateDistance(leftLinear, rightLinear) / 130.0
         self.currentAnglePub.publish(Float64(self.currentAngular))
         self.currentDistancePub.publish(Float64(self.currentLinear))
 
     def calculateDistance(self, left, right):
-        return (left + right)/2
+        return (left + right)/2.0
 
     def createGoal(self, twist):
         self.linearGoal = self.currentLinear
         self.angularGoal = self.currentAngular
 
-        self.angularGoal = self.angularGoal + (twist.angular.z*15)
-        self.linearGoal = self.linearGoal + (twist.linear.x*5)
-        print(twist.angular.z)
-        print(self.angularGoal)
+        self.angularGoal = self.angularGoal + (twist.angular.z*10)
+        self.linearGoal = self.linearGoal + (twist.linear.x*4)
+        print("==================================================================")
+        print("Our angular goal is :{}".format(self.angularGoal))
+        print("Current angular is :{}".format(self.currentAngular))
+        print("Our distance goal is :{}".format(self.linearGoal))
+        print("Current distance is :{}".format(self.currentLinear))
         self.anglePub.publish(Float64(self.angularGoal))
         self.distancePub.publish(Float64(self.linearGoal))
 
