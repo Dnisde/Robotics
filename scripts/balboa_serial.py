@@ -4,7 +4,8 @@ import serial
 import sys
 import rospy
 from std_msgs.msg import UInt8
-from balboa_core.msg import balboaLL
+from lab2.msg import balboaLLL
+
 from balboa_core.msg import balboaMotorSpeeds
 
 class TheNode(object):
@@ -36,7 +37,7 @@ class TheNode(object):
     right = int(speeds.right & 0xFF)
 
     #Start byte (just one)
-    self.port.write(chr(0xCD));
+    self.port.write(chr(0xCD))
     self.port.write(chr(left))
     self.port.write(chr(right))
     #checksum
@@ -51,8 +52,16 @@ class TheNode(object):
     baud = 57600
 
     self.port = serial.Serial(port=port_file, baudrate=baud)
-    self.publisher = rospy.Publisher('balboaLL', balboaLL, queue_size=10)
+    self.publisher = rospy.Publisher('balboaLL', balboaLLL, queue_size=10)
     rospy.Subscriber("motorSpeeds",balboaMotorSpeeds,self.handleSetMotorSpeed)
+
+  def printValue(self):
+
+    print("Value: {}{}{}{}{}{}{}{}{}\n".format(self.sensorValue[0],
+                                                   ' ',self.sensorValue[1],
+                                                   ' ',self.sensorValue[2],
+                                                   ' ',self.sensorValue[3],
+                                                   ' ',self.sensorValue[4]))
 
 
   def main_loop(self):
@@ -74,7 +83,7 @@ class TheNode(object):
       #Init the checksum
       self.checksum = 0xCD
 
-      msg = balboaLL()
+      msg = balboaLLL()
       msg.header.stamp = rospy.Time.now()
       msg.arduinoMillis = self.readFourByteAndChecksum()
       msg.batteryMillivolts = self.readFourByteAndChecksum()
@@ -88,6 +97,29 @@ class TheNode(object):
       msg.distanceLeft = self.readFourByteAndChecksum()
       msg.distanceRight = self.readFourByteAndChecksum()
 
+      msg.sensor1 = self.readFourByteAndChecksum()
+      msg.sensor2 = self.readFourByteAndChecksum()
+      msg.sensor3 = self.readFourByteAndChecksum()
+      msg.sensor4 = self.readFourByteAndChecksum()
+      msg.sensor5 = self.readFourByteAndChecksum()
+
+      self.sensor1Value = msg.sensor1
+      self.sensor2Value = msg.sensor2
+      self.sensor3Value = msg.sensor3
+      self.sensor4Value = msg.sensor4
+      self.sensor5Value = msg.sensor5
+      self.sensorValue = [self.sensor1Value,
+                          self.sensor2Value,
+                          self.sensor3Value,
+                          self.sensor4Value,
+                          self.sensor5Value]
+
+      # self.readOneByteAndChecksum()
+      # self.readOneByteAndChecksum()
+      # self.readOneByteAndChecksum()
+      # self.readOneByteAndChecksum()
+
+      # msg.SignalButtonC = self.readOneByteAndChecksum()
       # print("~~~~~~~")
       # print "should be 0: ", self.readFourByteAndChecksum()
       # print "should be -1: ", self.readFourByteAndChecksum()
@@ -99,12 +131,12 @@ class TheNode(object):
       #verify the checksum
       c = ord(self.port.read())
       if c != self.checksum:
-        print "Error, invalid checksum, expected", c, "got", self.checksum
+        print "Error, invalid checksum, expected: ", c, ", but got: ", self.checksum
         continue
 
       #Publish
       self.publisher.publish(msg)
-
+      self.printValue()
       r.sleep()
 
 
