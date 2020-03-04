@@ -22,7 +22,7 @@ class readFromSensorNode(object):
 
     def handleSensorValues(self, balboaLLMessage):
         if(!self.isTurning):
-            sensorValues = [chr(balboaLLMessage.sensor1), chr(balboaLLMessage.sensor2), chr(balboaLLMessage.sensor3), chr(balboaLLMessage.sensor4), chr(balboaLLMessage.sensor5)]
+            sensorValues = chr(balboaLLMessage.sensor1) + chr(balboaLLMessage.sensor2)+ chr(balboaLLMessage.sensor3)+ chr(balboaLLMessage.sensor4)+ chr(balboaLLMessage.sensor5)
             if(self.isForwards):
                 self.currentRun.append(sensorValues)
             else:
@@ -36,7 +36,22 @@ class readFromSensorNode(object):
     def printMap(self, value):
         if(value == "stop"):
             for list in self.characterMap:
-                print(list)
+                string1 = ''
+                string2 = ''
+                string3 = ''
+                string4 = ''
+                string5 = ''
+                for str in list:
+                    string1 = string1 + str[0]
+                    string2 = string2 + str[1]
+                    string3 = string3 + str[2]
+                    string4 = string4 + str[3]
+                    string5 = string5 + str[5]
+                print(string1)
+                print(string2)
+                print(string3)
+                print(string4)
+                print(string5)
 
 
 if __name__ == '__main__':
