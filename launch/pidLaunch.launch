@@ -23,9 +23,9 @@
         <remap from="rCtrl/I" to="linearI"/>
         <remap from="rCtrl/D" to="linearD"/>
 
-        <param name="linearP" type="double" value="2.0"/>
+        <param name="linearP" type="double" value="1.0"/>
         <param name="linearI" type="double" value="0.0"/>
-        <param name="linearD" type="double" value="5.0"/>
+        <param name="linearD" type="double" value="2.0"/>
         
         <node pkg="balboa_core" name="linearPID" type="PIDController.py" output="screen"/>
     </group>
@@ -34,5 +34,6 @@
     <node pkg="turtlesim" name="turtle_teleop" type="turtle_teleop_key" />
     <node pkg="balboa_core" name="inputConverter" type="converter.py" output="screen"/>
     <node pkg="balboa_core" name="motorSpeedHandler" type="speedConverter.py"/>
+	<node pkg="balboa_core" name="rangeFinder" type="rangeFinder.py"/>
 
 </launch>
