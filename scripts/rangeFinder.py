@@ -13,7 +13,8 @@ class RangeFinder(object):
         self.currentLocation = 0
         rospy.spin()
 
-    def handleRange(self, rangeValue):
+    def handleRange(self, balboaLLMessage):
+		rangeValue = balboaLLMessage.range
         if(rangeValue > 150):
             rangeValue = 150
         elif(rangeValue < 15):
