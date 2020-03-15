@@ -82,9 +82,9 @@ class readFromSensorNode(object):
 
     def sensorToString(self, sensorValue):
 
-        if(sensorValue < 50):
+        if(sensorValue < 75):
             return " "
-        elif(sensorValue < 90):
+        elif(sensorValue < 175):
             return "."
         else:
             return "x"
