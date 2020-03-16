@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import rospy
-# import pandas as pd
 from balboa_core.msg import balboaLL
 # from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64
@@ -16,52 +15,12 @@ class readFromSensorNode(object):
         self.isForwards = True
         self.characterMap = []
         self.currentRun = []
-        self.table = pd.DataFrame()
         self.lengthfw = 0
         self.lengthbw = 0
         rospy.spin()
 
     def setTurning(self, value):
         self.isTurning = bool(value.data)
-
-
-    def handleSensorValues2(self, balboaLLMessage):
-
-        # not turnning, Deal with the sensorValues data by scannining, store them into an array
-        if(not self.isTurning):
-            sensorValues = self.sensorToString(balboaLLMessage.sensor1) + self.sensorToString(balboaLLMessage.sensor2) + self.sensorToString(balboaLLMessage.sensor3) + self.sensorToString(balboaLLMessage.sensor4) + self.sensorToString(balboaLLMessage.sensor5)
-            if(self.isForwards):    # Go forward direction
-                self.currentRun.append(sensorValues)
-                self.lengthfw = self.lengthfw + 1
-            else:                    # Go backward direction
-                self.currentRun.insert(0, sensorValues)
-                self.lengthbw = self.lengthbw + 1
-
-        # Start turnning
-        else:
-            self.isForwards = not self.isForwards # Go opposite way to scanning
-
-            if(self.table.empty == False): # If table is not empty
-                if(self.lenghfw < self.lengthbw): # If it is smaller than last column
-                    self.currentRun.pop(self.lenghbw - self.lenghfw)
-                    self.table = self.table.concat(self.currentRun, ignore_index=True)
-
-                elif(self.lenghbw < self.lenthfw): # If it is greater than last column
-                    self.currentRun.pop(self.lenghfw - self.lenghbw)
-                    self.table = self.table.concat(self.currentRun, ignore_index=True)
-
-                else: # They are equal size
-                    self.table = self.table.concat(self.currentRun, ignore_index=True)
-
-                self.lengthfw = 0
-                self.lenghbw = 0
-
-            else: # It is empty and just add up the first column into the table
-                self.table = self.table.concat(self.currentRun, ignore_index=True)
-                print(self.table.head()) ## Debug
-                self.currentRun = []
-                self.lengthfw = 0
-                self.lenghbw = 0
 
 
     def handleSensorValues(self, balboaLLMessage):
